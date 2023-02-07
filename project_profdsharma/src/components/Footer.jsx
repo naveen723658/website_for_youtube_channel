@@ -35,28 +35,40 @@ const Footer = () => {
       })
       .catch((error) => {
         console.log(error);
-      });
+      })
       
     axios
-      .get(`https://www.googleapis.com/youtube/v3/channels`, {
-        params: {
-          part: "brandingSettings",
-          id: CHANNEL_ID,
-          key: API_KEY,
-        },
+      .get("http://127.0.0.1:8000/statistic/")
+      .then((res) => {
+        // console.log()
+        const keywordsString = res.data.items[0].brandingSettings.channel.keywords;
+        const keywordsList = keywordsString.split('\n');
+        settags(keywordsList);
       })
-      .then((response) => {
-        // console.log(response.brandingSettings.channel.keywords);
-        settags(response.data.items[0].snippet.tags)
+      .catch((error) => {
+        console.log(error);
       })
+      
+    // axios
+    //   .get(`https://www.googleapis.com/youtube/v3/channels`, {
+    //     params: {
+    //       part: "brandingSettings",
+    //       id: CHANNEL_ID,
+    //       key: API_KEY,
+    //     },
+    //   })
+      // .then((response) => {
+      //   console.log(response.brandingSettings.channel.keywords);
+      //   settags(response.data.items[0].snippet.tags)
+      // })
       .catch((error) => {
         console.log(error);
       });
   }, []);
-  // 
   return (
     <>
       {/* col btn btn-default */}
+      
       <div className="footer-ablove">
         <div className="container">
           <div className="d-block d-lg-flex justify-content-between align-item-center">
@@ -145,32 +157,15 @@ const Footer = () => {
                 <div className="kilimanjaro_part">
                   <h5>Tags Widget</h5>
                   <ul className=" kilimanjaro_widget">
-                    <li>
-                      <a href="#">Classy</a>
-                    </li>
-                    <li>
-                      <a href="#">Blog</a>
-                    </li>
-                    <li>
-                      <a href="#">Creative</a>
-                    </li>
-                    <li>
-                      <a href="#">One Page</a>
-                    </li>
-                    <li>
-                      <a href="#">Multipurpose</a>
-                    </li>
-                    <li>
-                      <a href="#">Minimal</a>
-                    </li>
-                    <li>
-                      <a href="#">Classic</a>
-                    </li>
-                    <li>
-                      <a href="#">Medical</a>
-                    </li>
-                  </ul>
-                </div>
+                { tags.map((item, index) =>(
+                   <li key={index}>
+                   <a href="#">{item}</a>
+                 </li>
+                )) }
+                </ul>
+                 
+                </div> 
+               
                 <div className="kilimanjaro_part m-top-15">
                   <h5>Important Links</h5>
                   <ul className="kilimanjaro_links">

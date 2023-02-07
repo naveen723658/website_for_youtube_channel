@@ -4,11 +4,12 @@ import HtmlToReact from "html-to-react";
 import { FaAngleRight, FaUser, FaBook } from "react-icons/fa";
 import axios from "axios";
 import { useParams, Link } from "react-router-dom";
+import Topheader from "./Topheader";
 
 const Video = () => {
   const [Playlist, setPlaylist] = useState([]);
   const parser = new HtmlToReact.Parser();
-  
+
   const parm = useParams();
   const VIDEO_ID = parm.videoId;
   const playlistId = parm.playlistId;
@@ -21,19 +22,15 @@ const Video = () => {
       const videodetails = await axios.get(
         `http://127.0.0.1:8000/video_detail/${VIDEO_ID}`
       );
+      console.log(videodetails.data.items);
       setvideodetail(videodetails.data.items);
 
       // PlayList Item
-      const playlists = await axios.get(
-        // `https://www.googleapis.com/youtube/v3/playlists?channelId=${CHANNEL_ID}&key=${API_KEY}&part=snippet,contentDetails`
-        'http://127.0.0.1:8000/playlists/'
-      );
-      // console.log(playlists.data.items);
+      const playlists = await axios.get("http://127.0.0.1:8000/playlists/");
       setPlaylist(playlists.data.items);
 
       // PlayList Video
       const playlistVideos = await axios.get(
-        // `https://www.googleapis.com/youtube/v3/playlistItems?playlistId=${playlistId}&maxResults=8&part=snippet&key=${API_KEY}`
         `http://127.0.0.1:8000/playlist_items/${playlistId}/8`
       );
       setPlaylistData(
@@ -44,7 +41,6 @@ const Video = () => {
 
       // comments
       const comments = await axios.get(
-        // `https://www.googleapis.com/youtube/v3/commentThreads?videoId=${VIDEO_ID}&maxResults=5&part=snippet&key=${API_KEY}`
         `http://127.0.0.1:8000/comments/${VIDEO_ID}`
       );
       const commentsList = comments.data.items;
@@ -52,12 +48,10 @@ const Video = () => {
       // Iterate over comments list to fetch comments and replies
       for (const comment of commentsList) {
         const replies = await axios.get(
-          // `https://www.googleapis.com/youtube/v3/comments?parentId=${comment.id}&part=snippet&key=${API_KEY}`
           `http://127.0.0.1:8000/comments_replies/${comment.id}`
         );
         comment.replies = replies.data.items;
       }
-      // console.log(commentsList);
       setcommentdata(commentsList);
     } catch (error) {
       console.log(error);
@@ -66,7 +60,7 @@ const Video = () => {
 
   useEffect(() => {
     fetchData();
-  }, [VIDEO_ID, API_KEY]);
+  }, [VIDEO_ID]);
 
   function convertToHtml(text) {
     // Find all URLs and replace them with <a> tags
@@ -84,25 +78,8 @@ const Video = () => {
     <>
       {videodetail[0] && (
         <>
-          {/* Header */}
-          <div className="page-nav no-margin row">
-            <div className="container">
-              <div className="row">
-                <h2>{videodetail[0].snippet.title}</h2>
-                <ul>
-                  <li>
-                    {" "}
-                    <a href="/">
-                      <i className="fas fa-home" /> Home
-                    </a>
-                  </li>
-                  <li>
-                    <FaAngleRight /> About
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
+
+          <Topheader title={videodetail[0].snippet.title} subtitle="About"/>
           {/* Header section end */}
 
           <div className="container-fluid video-blog">
@@ -111,6 +88,7 @@ const Video = () => {
                 <div className="col-md-8">
                   <div className="video-cover">
                     <iframe
+                      id="video"
                       height={415}
                       src={`https://www.youtube.com/embed/${videodetail[0].id}`}
                       allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -125,7 +103,10 @@ const Video = () => {
                     </div>
                     <div className="w-100 my-4">
                       <h5 className="d-flex align-item-center ">
-                        <FaBook /> <div className="mx-2">{videodetail[0].statistics.commentCount} Comments</div>
+                        <FaBook />{" "}
+                        <div className="mx-2">
+                          {videodetail[0].statistics.commentCount} Comments
+                        </div>
                       </h5>
                     </div>
 
@@ -158,13 +139,13 @@ const Video = () => {
                                     data.snippet.topLevelComment.snippet
                                       .authorDisplayName
                                   }
-                                <small className="mx-2">
-                                  <span>posted on:</span>
-                                  {data.snippet.topLevelComment.snippet.updatedAt.slice(
-                                    0,
-                                    10
-                                  )}
-                                </small>
+                                  <small className="mx-2">
+                                    <span>posted on:</span>
+                                    {data.snippet.topLevelComment.snippet.updatedAt.slice(
+                                      0,
+                                      10
+                                    )}
+                                  </small>
                                 </h6>
                                 <p>
                                   {
@@ -177,16 +158,17 @@ const Video = () => {
                           </>
                         ))}
 
-                        <div className="d-flex justify-content-end align-item-center"><button className="btn btn-danger">Load more</button></div>
+                      <div className="d-flex justify-content-end align-item-center">
+                        <button className="btn btn-danger">Load more</button>
+                      </div>
                     </div>
 
-                   
                     <div className="w-100 my-4 pt-4">
                       <h5 className="d-flex align-item-center ">
                         <FaBook /> <div className="mx-2">Post Your Comment</div>
                       </h5>
                     </div>
-           
+
                     <div className="comment-text mx-0">
                       <div className="form-row mx-0 row">
                         <input
@@ -227,7 +209,7 @@ const Video = () => {
                 <div className="col-md-4">
                   <div className="row no-margin video-title">
                     <h5>
-                      <FaBook/> Related Videos
+                      <FaBook /> Related Videos
                     </h5>
                   </div>
                   {playlistData &&
@@ -265,7 +247,7 @@ const Video = () => {
                     </h6>
                   </div> */}
 
-                  {Playlist &&
+                  {/* {Playlist &&
                     Playlist.map((item, index) => (
                       <div className="contri-row" key={index}>
                         <div className="image">
@@ -282,7 +264,7 @@ const Video = () => {
                           <p>{item.contentDetails.itemCount} Videos</p>
                         </div>
                       </div>
-                    ))}
+                    ))} */}
                 </div>
               </div>
             </div>

@@ -16,4 +16,16 @@ class EmailSerializer(serializers.ModelSerializer):
         model = Email
         fields = ('id', 'email')
 
+class StotraAndStutiCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = StotraAndStutiCategory
+        fields = ('id','title', 'desc')
+
+class StotraAndStutiSerializer(serializers.ModelSerializer):
+    category = StotraAndStutiCategorySerializer(read_only=True)
+
+    class Meta:
+        model = StotraAndStuti
+        fields = ('id', 'category', 'img')
+
     

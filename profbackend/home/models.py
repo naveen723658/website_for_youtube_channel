@@ -15,13 +15,29 @@ class Header(models.Model):
 class Hero(models.Model):
     img = models.ImageField(verbose_name=("Crousel Image"), upload_to="Crousel", height_field=None, width_field=None, max_length=None)
     desc = models.CharField(verbose_name=("Short Title"), max_length=70, null=True, blank=True)
-# class Category(models.Model):
-#     text = models.CharField(verbose_name=("name"), max_length=50, unique=True)
 
-# class Video(models.Model):
-#     playlist = models.ForeignKey(Category, verbose_name=_("Category"), on_delete=models.CASCADE)
-#     thumbnail = models.ImageField(verbose_name=("Thumbnail"), upload_to="video/thumbnail", height_field=None, width_field=None, max_length=None)
-#     vid = models.FileField(verbose_name=("Video File"), upload_to="video", max_length=100)
-#     path = models.URLField(verbose_name=("Youtube Embed Video Url"), max_length=200)
-#     title = models.CharField(verbose_name=("Video Title"), max_length=50)
+class StotraAndStutiCategory(models.Model):
+    title = models.CharField(verbose_name="Title", max_length=50, unique=True)
+    desc = models.TextField(verbose_name="Short Description", max_length=200)
+    def __str__(self):
+        return self.title
+    
+
+class StotraAndStuti(models.Model):
+    category = models.ForeignKey(StotraAndStutiCategory, verbose_name="category", on_delete=models.CASCADE)
+    img = models.ImageField(verbose_name="Upload Image", upload_to="stotra", height_field=None, width_field=None, max_length=None)
+    def __str__(self):
+        return self.category.title + " | " + str(self.id)
+    
+class Category(models.Model):
+    text = models.CharField(verbose_name=("name"), max_length=50, unique=True)
+    def __str__(self):
+        return self.text
+class Video(models.Model):
+    playlist = models.ForeignKey(Category, verbose_name=("Category"), on_delete=models.CASCADE)
+    title = models.CharField(verbose_name=("Video Title"), max_length=50)
+    thumbnail = models.ImageField(verbose_name=("Thumbnail"), upload_to="video/thumbnail", height_field=None, width_field=None, max_length=None)
+    vid = models.FileField(verbose_name=("File"), upload_to="video", max_length=100)
+    path = models.URLField(verbose_name=("Youtube Embed Video Url"), max_length=200)
+    desc = models.CharField(verbose_name=("Video Description"), max_length=50)
     

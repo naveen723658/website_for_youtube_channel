@@ -7,60 +7,60 @@ import Navbar from "./components/Navbar";
 import Latest from "./components/Latest";
 import axios from "axios";
 import Video from "./components/Video";
+import Allvideos from "./components/Allvideos";
 import Category from "./components/Category";
+import StickyIcons from "./components/StickyIcons";
+import Priorty from "./components/Priorty";
+import Stats from "./components/Stats";
+import Contact from "./components/Contact";
+import About from "./components/About";
+import Recent from "./components/Recent";
+import Stotra from "./components/Stotra";
+import Public from "./components/Public";
+import Live from "./components/Live";
+import Seminar from "./components/Seminar";
 function App() {
   const [latestVideos, setLatestVideos] = useState([]);
   const [playlistsData, setPlaylistsData] = useState([]);
   const [Playlist, setPlaylist] = useState([]);
-  const fetchData = async () => {
-    const latestUploads = await axios.get(
-      'http://127.0.0.1:8000/latest_videos/'
-    );
-    setLatestVideos(latestUploads.data);
+  // const fetchData = async () => {
+  //   const latestUploads = await axios.get(
+  //     'http://127.0.0.1:8000/latest_videos/'
+  //   );
+  //   setLatestVideos(latestUploads.data);
     
-    const playlists = await axios.get(
-      'http://127.0.0.1:8000/playlists/'
-    );
-    setPlaylist(playlists.data.items);
-    let data = [];
-    for (let i = 0; i < playlists.data.items.length; i++) {
-      const id = playlists.data.items[i].id;
-      const title = playlists.data.items[i].snippet.title;
-      const videos = await axios.get(
-        `http://127.0.0.1:8000/playlist_items/${id}/${4}`
-      );
+  //   const playlists = await axios.get(
+  //     'http://127.0.0.1:8000/playlists/'
+  //   );
+  //   setPlaylist(playlists.data.items);
 
-      const videoIds = videos.data.items.map(item => item.snippet.resourceId.videoId);
-      const statistics = await axios.get(
-        `http://127.0.0.1:8000/video_statistics/${videoIds.join(',')}`
-      );
-      videos.data.items.forEach((item, index) => {
-        item.statistics = statistics.data.items[index].statistics;
-      });
-
-      if (videos.data.items.length >= 4) {
-        let items = videos.data.items
-        data.push({ title: title, items: items, playlistsId: id });
-      }
-    }
-    setPlaylistsData(data);
-  };
-  useEffect(() => {
-    fetchData();
-  }, [ ]);
+  // };
+  // useEffect(() => {
+  //   fetchData();
+  // }, [ ]);
   
  
   return (
     <>
       <BrowserRouter>
         <Navbar />
+        <StickyIcons/>
         <Routes>
           <Route
             path="/"
             element={[
               <Hero herodata={latestVideos} />,
-              <Latest youtubedata={playlistsData} />,
-              <Category playlistitem={Playlist} />,
+              <Recent/>,
+              <Latest />,
+              <Stats/>,
+              <Category />,
+              <Live />
+            ]}
+          />
+          <Route
+            path="/about/:videoId"
+            element={[
+                <Video/>,
             ]}
           />
           <Route
@@ -69,7 +69,13 @@ function App() {
                 <Video/>,
             ]}
           />
-          
+          <Route path="/about_us" element = {[<About/>]} />
+          <Route path="/Contact" element = {[<Contact/>]} />
+          <Route path="/allvideos" element = {[<Allvideos/>]} />
+          <Route path="/stotra-and-stuti" element = {[<Stotra/>]} />
+          <Route path="/public-opinion" element = {[<Public/>]} />
+          <Route path="/seminar" element = {[<Seminar/>]} />
+
         </Routes>
         <Footer />
       </BrowserRouter>

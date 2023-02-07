@@ -21,13 +21,25 @@ from home.views import *
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('home/', include('home.urls')),
-    path('latest_videos/', latest_videos_endpoint, name='latest_videos'),
-    path('playlists/', playlists_endpoint, name='playlists'),
+    # path('latest_videos/', latest_videos_endpoint, name='latest_videos'),
+    path('playlists/<page_token>/', playlists_endpoint),
+    path('playlists/', playlists_endpoint, name='playlists',kwargs={'page_token':None}),
     path('playlist_items/<str:playlist_id>/<int:max_results>/', playlist_items_endpoint, name='playlist_items'),
     path('video_statistics/<str:video_ids>/', video_statistics_endpoint, name='video_statistics'),
+
+    # Detail video 
     path('video_detail/<video_id>/',video_detail_endpoint, name='video_detail'),
-    # path('playlists/<channel_id>/', playlists_endpoint, name='playlists'),
-    # path('playlist_items/<playlist_id>/', playlist_items_endpoint, name='playlist_items'),
+    # 
+
+    path('statistic/', stats, name='statistic'),
+
+    # all video route 
+    path('channel_videos/<page_token>', get_channel_videos ),
+    path('channel_videos/', get_channel_videos, kwargs={'page_token':None}),
+    # 
+    # live video 
+    path('live',fetch_live_video),
+    path('combine_data/', get_playlists_and_statistics, name='get_playlists_and_statistics'),
     path('comments/<video_id>/', comments_endpoint, name='comments'),
     path('comments_replies/<parent_id>/', comments_replies_endpoint, name='comments_replies'),
 ]
