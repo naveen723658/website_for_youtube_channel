@@ -9,6 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.11",
     "axios": "^1.2.2",
     "counterup2": "^2.0.2",
     "html-to-react": "^1.5.0",

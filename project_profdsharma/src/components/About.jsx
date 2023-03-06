@@ -4,13 +4,13 @@ import Topheader from "./Topheader";
 const About = () => {
   return (
     <>
-    <Topheader title="About US" subtitle="about" />
+      <Topheader title="About US" subtitle="about" />
       <div id="about" className="about-company">
         <div className="container">
-          <div className="row">
+          <div className="row align-item-center ">
             <div className="col-md-6">
               <div className="detail">
-                <h3>About Us</h3>
+                <h3>Prof. Dharmender Sharma</h3>
                 <p>
                   Prof. Dharmender Sharma is a well known and reputed name is
                   the field of Astrology, Palmistry and Vastushastra throughout
@@ -32,8 +32,14 @@ const About = () => {
                 </p>
               </div>
             </div>
-            <div className="col-md-6">
-              <div className="imag">
+            <div
+              className="col-md-6"
+              style={{ display: "flex", alignItems: "center", height: "auto" }}
+            >
+              <div
+                className="imag "
+                style={{ display: "inline-block", height: "auto" }}
+              >
                 <img src="assets/images/anime-banner.gif" alt="" />
               </div>
             </div>

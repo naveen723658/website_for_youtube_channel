@@ -16,8 +16,6 @@ const Category = () => {
       const response = await axios.get(
         `http://127.0.0.1:8000/playlists/${pageToken}`
       );
-      // console.log(response.data);
-      // setPlaylist(response.data);
       const { items, nextPageToken } = response.data;
       setPlaylist([...items]);
       setToken(nextPageToken);
@@ -30,7 +28,7 @@ const Category = () => {
     }
   },[pageToken]);
 
-console.log('pagetoken = ', pageToken)
+// console.log('pagetoken = ', pageToken)
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/combine_data/")

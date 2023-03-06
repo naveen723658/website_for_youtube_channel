@@ -22,7 +22,6 @@ const Latest = () => {
         console.log(error);
       });
   }, [setYoutubedata]);
-  console.log(youtubedata.playlistsitems);
   return (
     <>
       {youtubedata.playlists &&
@@ -63,7 +62,7 @@ const Latest = () => {
                                   key={index}
                                 >
                                   <Link
-                                    to={`/about/${data.snippet.resourceId.videoId}/${data.snippet.playlistId}`}
+                                    to={`/about/${data.snippet.resourceId.videoId}`}
                                     key={index}
                                   >
                                     <div className="video-card">

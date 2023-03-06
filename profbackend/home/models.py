@@ -33,11 +33,13 @@ class Category(models.Model):
     text = models.CharField(verbose_name=("name"), max_length=50, unique=True)
     def __str__(self):
         return self.text
+    
 class Video(models.Model):
     playlist = models.ForeignKey(Category, verbose_name=("Category"), on_delete=models.CASCADE)
     title = models.CharField(verbose_name=("Video Title"), max_length=50)
-    thumbnail = models.ImageField(verbose_name=("Thumbnail"), upload_to="video/thumbnail", height_field=None, width_field=None, max_length=None)
-    vid = models.FileField(verbose_name=("File"), upload_to="video", max_length=100)
-    path = models.URLField(verbose_name=("Youtube Embed Video Url"), max_length=200)
-    desc = models.CharField(verbose_name=("Video Description"), max_length=50)
-    
+    thumbnail = models.ImageField(verbose_name="Thumbnail", upload_to="video/thumbnail",height_field=None, width_field=None, max_length=None)
+    vid = models.FileField(verbose_name=("File"), upload_to="video", max_length=100, null=True, blank=True)
+    path = models.URLField(verbose_name=("Youtube Embed Video Url"), max_length=200, null=True, blank=True, default='')
+    desc = models.CharField(verbose_name=("Video Description"), max_length=50, null=True, blank=True)
+    def __str__(self):
+        return self.title + " | " + str(self.id)

@@ -4,12 +4,12 @@ from rest_framework import viewsets
 from decouple import config
 import json
 from django.http import JsonResponse
-from googleapiclient.discovery import build, BatchHttpRequest
+from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from django.core.cache import cache
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
-import requests
-import xmltodict
 
 
 KEYLIST = config(
@@ -62,7 +62,7 @@ def fetch_live_video(request):
             fields='items(id(videoId))'
         )
         response = request.execute()
-        cache.set("live_video", response, 60 * 20 )        
+        cache.set(cache_key, response, 60 * 20 )        
     return JsonResponse(response)
 
 
@@ -74,36 +74,104 @@ def video_detail_endpoint(request, video_id):
         api_key = get_api_key()
         youtube = build("youtube", "v3", developerKey=api_key)
         request = youtube.videos().list(
-            id=video_id, part="snippet,statistics,localizations"
+            id=video_id, part="snippet,statistics,localizations, contentDetails",
         )
         response = request.execute()
-        cache.set("video_detail_endpoint", response, 60 * 60 * 24)
+        cache.set(cache_key, response, 60 * 60 * 24)
     return JsonResponse(response)
 
-def comments_endpoint(request, video_id):
-    cache_key = f"comments_endpoint_{video_id}"
+# related videos endpoint
+def get_playlist_items(request, video_id):
+    cache_key = f"get_playlist_items_{video_id}"
+    response = cache.get(cache_key)
+    if response is None:
+        api_key = get_api_key()
+        youtube = build("youtube", "v3", developerKey=api_key)
+        request = youtube.search().list(
+                relatedToVideoId = video_id,
+                channelId=CHANNEL_ID,
+                part="snippet, id",
+                type ='video',
+                maxResults=20
+            )
+        response = request.execute()
+        cache.set(cache_key, response, 60 * 60 * 24)
+        
+    videos = []
+    for video in response["items"]:
+        if video["snippet"]["channelId"] == CHANNEL_ID:
+            videos.append(video)
+
+    return JsonResponse({"items": videos})
+
+def get_comments(request, video_id, nextPageToken):
+    cache_key = f"get_comments_{video_id}_{nextPageToken}"
     response = cache.get(cache_key)
     if response is None:
         api_key = get_api_key()
         youtube = build("youtube", "v3", developerKey=api_key)
         request = youtube.commentThreads().list(
-            videoId=video_id, maxResults=5, part="snippet"
-        )
+                part="snippet, replies",
+                videoId=video_id,
+                textFormat="plainText",
+                maxResults=20,
+                order = 'relevance',
+                pageToken = nextPageToken
+            )
         response = request.execute()
-        cache.set("comments_endpoint", response, 60 * 60 * 24)
-    return JsonResponse(response)
+        cache.set(cache_key, response, 60 * 60 * 24)
+
+    comments = []
+
+    for comment in response["items"]:
+        replies = []
+        if "replies" in comment:
+            replies = [                
+                    {"author": reply["snippet"]["authorDisplayName"],
+                    "authorProfileImageUrl": reply["snippet"]["authorProfileImageUrl"],
+                    "updatedAt": reply["snippet"]["updatedAt"],
+                    "likeCount": reply["snippet"]["likeCount"],
+                    "text": reply["snippet"]["textDisplay"]}
+                for reply in comment["replies"]["comments"]
+            ]
+        comments.append({            
+            "author": comment["snippet"]["topLevelComment"]["snippet"]["authorDisplayName"],
+            "authorProfileImageUrl": comment["snippet"]["topLevelComment"]["snippet"]["authorProfileImageUrl"],
+            "updatedAt": comment["snippet"]["topLevelComment"]["snippet"]["updatedAt"],
+            "totalReplyCount": comment["snippet"]["totalReplyCount"],
+            "likeCount": comment["snippet"]["topLevelComment"]["snippet"]["likeCount"],
+            "text": comment["snippet"]["topLevelComment"]["snippet"]["textDisplay"],
+            "replies": replies
+        })
+        encoded_token = response["nextPageToken"]
+    return JsonResponse({"items": comments, "nextPageToken": encoded_token})
 
 
-def comments_replies_endpoint(request, parent_id):
-    cache_key = f"comments_replies_endpoint_{parent_id}"
-    response = cache.get(cache_key)
-    if response is None:
-        api_key = get_api_key()
-        youtube = build("youtube", "v3", developerKey=api_key)
-        request = youtube.comments().list(parentId=parent_id, part="snippet")
-        response = request.execute()
-        cache.set("comments_replies_endpoint", response, 60 * 60 * 24)
-    return JsonResponse(response)
+
+# def comments_endpoint(request, video_id):
+#     cache_key = f"comments_endpoint_{video_id}"
+#     response = cache.get(cache_key)
+#     if response is None:
+#         api_key = get_api_key()
+#         youtube = build("youtube", "v3", developerKey=api_key)
+#         request = youtube.commentThreads().list(
+#             videoId=video_id, maxResults=5, part="snippet"
+#         )
+#         response = request.execute()
+#         cache.set("comments_endpoint", response, 60 * 60 * 24)
+#     return JsonResponse(response)
+
+
+# def comments_replies_endpoint(request, parent_id):
+#     cache_key = f"comments_replies_endpoint_{parent_id}"
+#     response = cache.get(cache_key)
+#     if response is None:
+#         api_key = get_api_key()
+#         youtube = build("youtube", "v3", developerKey=api_key)
+#         request = youtube.comments().list(parentId=parent_id, part="snippet")
+#         response = request.execute()
+#         cache.set("comments_replies_endpoint", response, 60 * 60 * 24)
+#     return JsonResponse(response)
 
 def get_channel_videos(request, page_token):
     cache_key = f"channel_videos_{page_token}"
@@ -262,7 +330,7 @@ def playlist_items_endpoint(request, playlist_id, max_results):
             playlistId=playlist_id, maxResults=max_results, part="snippet"
         )
         response = request.execute()
-        cache.set("playlist_items_endpoint", response, 60 * 60)
+        cache.set(cache_key, response, 60 * 60)
     return JsonResponse(response)
 
 
@@ -274,7 +342,7 @@ def video_statistics_endpoint(request, video_ids):
         youtube = build("youtube", "v3", developerKey=api_key)
         request = youtube.videos().list(id=video_ids, part="statistics")
         response = request.execute()
-        cache.set("video_statistics_endpoint", response, 60 * 60)
+        cache.set(cache_key, response, 60 * 60)
     return JsonResponse(response)
 
 
@@ -307,3 +375,23 @@ class EmailViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = EmailSerializer
 
 
+class CategorySerializerViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategorySerializer
+
+# class VideoSerializerViewSet(viewsets.ReadOnlyModelViewSet):
+#     queryset = Video.objects.all()
+#     paginator = Paginator(queryset, 2)
+#     serializer_class = VideoSerializer
+
+class VideoSerializerViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Video.objects.all()
+    serializer_class = VideoSerializer
+
+    def list(self, request, *args, **kwargs):
+        paginator = PageNumberPagination()
+        paginator.page_size = 2 # 2 objects per page
+        videos = self.queryset
+        result_page = paginator.paginate_queryset(videos, request)
+        serializer = self.serializer_class(result_page, many=True, context={'request': request})
+        return paginator.get_paginated_response(serializer.data)

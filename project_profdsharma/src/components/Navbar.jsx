@@ -102,18 +102,17 @@ const Navbar = () => {
                     <div className="m-scroll__title">
                       <div>
                         {headerData &&
-                          headerData.map((data) => (
-                            <p>
+                          headerData.map((data, index) => (
+                            <p key={index}>
                               {data.appointment}{" "}
                               {contactData &&
-                                contactData.map((item) => (
+                                contactData.map((item, index) => (
                                   <span key={item.id}>+91 {item.no}</span>
                                 ))}{" "}
-                              &nbsp;
                             </p>
                           ))}
 
-                        <p>{text2}&nbsp;</p>
+                        <p>{text2}</p>
                       </div>
                     </div>
                   </li>
@@ -127,15 +126,24 @@ const Navbar = () => {
             <div className="nav-wrapper">
               <nav className="navbar">
                 {headerData &&
-                  headerData.map((data) => (
-                    <img className="logo" src={data.logo} alt="" />
+                  headerData.map((data, index) => (
+                    <img className="logo" key={index} src={data.logo} alt="" />
                   ))}
-                <div className="menu-toggle"  onClick={handleClick} id="mobile-menu">
+                <div
+                  className="menu-toggle"
+                  onClick={handleClick}
+                  id="mobile-menu"
+                >
                   <span className="bar" />
                   <span className="bar" />
                   <span className="bar" />
                 </div>
-                <ul className={`nav no-search ${mobileNavOpen ? 'mobile-nav' : ''}`}>
+                <ul
+                  className={`nav no-search ${
+                    mobileNavOpen ? "mobile-nav" : ""
+                  }`}
+                  key={1110}
+                >
                   {navitems &&
                     navitems.map((item, index) => (
                       <>

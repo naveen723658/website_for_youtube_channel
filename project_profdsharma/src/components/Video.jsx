@@ -45,7 +45,7 @@ const Video = () => {
       );
       console.log(videodetails.data);
       setvideodetail(videodetails.data.items);
-        // Playlist Items
+      // Playlist Items
       const playlistVideos = await axios.get(
         `http://127.0.0.1:8000/playlistsitem/${VIDEO_ID}`
       );
@@ -58,9 +58,7 @@ const Video = () => {
       setcommentdata(comments.data);
 
       // Playlist
-      const playlist = await axios.get(
-        `http://127.0.0.1:8000/playlists/`
-      );
+      const playlist = await axios.get(`http://127.0.0.1:8000/playlists/`);
       setPlaylist(playlist.data);
     } catch (error) {
       console.log(error);
@@ -189,72 +187,69 @@ const Video = () => {
             </div>
             <div className=" video-list-main-div">
               <div className="mb-4 video-list-inner-div">
-              <div className="row no-margin video-title">
-                <h5>
-                  <FaBook /> Related Videos
-                </h5>
+                <div className="row no-margin video-title">
+                  <h5>
+                    <FaBook /> Related Videos
+                  </h5>
+                </div>
+                <div className="video-list-container">
+                  <Link to={`/about/${VIDEO_ID}`} className={`list active`}>
+                    {/* <video src="images/vid-1.mp4" className="list-video" /> */}
+                    <img
+                      className="list-video"
+                      src={videodetail[0].snippet.thumbnails.medium.url}
+                      alt=""
+                    />
+
+                    <h3 className="list-title">
+                      {videodetail[0].snippet.title}...
+                    </h3>
+                  </Link>
+
+                  {playlistData &&
+                    playlistData.map((data, index) => (
+                      <>
+                        <Link
+                          to={`/about/${data.id.videoId}`}
+                          className={`list`}
+                          key={index}
+                        >
+                          {/* <video src="images/vid-1.mp4" className="list-video" /> */}
+                          <img
+                            className="list-video"
+                            src={data.snippet.thumbnails.medium.url}
+                            alt=""
+                          />
+
+                          <h3 className="list-title">
+                            {data.snippet.title.slice(0, 50)}...
+                          </h3>
+                        </Link>
+                      </>
+                    ))}
+                </div>
               </div>
-              <div className="video-list-container">
-                <Link to={`/about/${VIDEO_ID}`} className={`list active`}>
-                  {/* <video src="images/vid-1.mp4" className="list-video" /> */}
-                  <img
-                    className="list-video"
-                    src={videodetail[0].snippet.thumbnails.medium.url}
-                    alt=""
-                  />
-
-                  <h3 className="list-title">
-                    {videodetail[0].snippet.title}...
-                  </h3>
-                </Link>
-
-                {playlistData &&
-                  playlistData.map((data, index) => (
-                    <>
-                      <Link
-                        to={`/about/${data.id.videoId}`}
-                        className={`list`}
-                        key={index}
-                      >
-                        {/* <video src="images/vid-1.mp4" className="list-video" /> */}
-                        <img
-                          className="list-video"
-                          src={data.snippet.thumbnails.medium.url}
-                          alt=""
-                        />
-
-                        <h3 className="list-title">
-                          {data.snippet.title.slice(0, 50)}...
-                        </h3>
-                      </Link>
-                    </>
-                  ))}
-              </div>
-              </div>
-
 
               <div className="my-4  video-list-inner-div">
-              <div className="row no-margin video-title">
-                <h5>
-                  <FaBook /> Top Rated Playlist
-                </h5>
-              </div>
-              <div className="video-list-container">
-                {Playlist &&
-                  Playlist.items.map((data, index) => (
-                    <>
-                      <Link
-                        to={`/about/${VIDEO_ID}`}
-                        className={`list`}
-                        key={index}
-                      >
-                        <h3 className="list-title">
-                          {data.snippet.title}
-                        </h3>
-                      </Link>
-                    </>
-                  ))}
-              </div>
+                <div className="row no-margin video-title">
+                  <h5>
+                    <FaBook /> Top Rated Playlist
+                  </h5>
+                </div>
+                <div className="video-list-container h-auto">
+                  {Playlist &&
+                    Playlist.items.map((data, index) => (
+                      <>
+                        <Link
+                          to={`/about/${VIDEO_ID}`}
+                          className={`list`}
+                          key={index}
+                        >
+                          <h3 className="list-title">{data.snippet.title}</h3>
+                        </Link>
+                      </>
+                    ))}
+                </div>
               </div>
             </div>
           </div>

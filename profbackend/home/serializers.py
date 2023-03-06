@@ -29,3 +29,24 @@ class StotraAndStutiSerializer(serializers.ModelSerializer):
         fields = ('id', 'category', 'img')
 
     
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('id','text')
+class VideoSerializer(serializers.ModelSerializer):
+    playlist = CategorySerializer(read_only=True)
+    thumbnail = serializers.SerializerMethodField()
+    vid = serializers.SerializerMethodField()
+    class Meta:
+        model = Video
+        fields = ('id', 'playlist', 'title', 'thumbnail', 'vid', 'path','desc')
+
+    def get_thumbnail(self, obj):
+        try:
+            return self.context['request'].build_absolute_uri(obj.thumbnail.url) if obj.thumbnail else None
+        except ValueError:
+            return None
+
+    def get_vid(self, obj):
+        return self.context['request'].build_absolute_uri(obj.vid.url) if obj.vid else None

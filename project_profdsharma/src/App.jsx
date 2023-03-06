@@ -19,6 +19,8 @@ import Stotra from "./components/Stotra";
 import Public from "./components/Public";
 import Live from "./components/Live";
 import Seminar from "./components/Seminar";
+import Frontvideo from "./components/Frontvideo";
+import Detailvideo from "./components/Detailvideo";
 function App() {
   const [latestVideos, setLatestVideos] = useState([]);
   const [playlistsData, setPlaylistsData] = useState([]);
@@ -50,6 +52,7 @@ function App() {
             path="/"
             element={[
               <Hero herodata={latestVideos} />,
+              <Frontvideo/>,
               <Recent/>,
               <Latest />,
               <Stats/>,
@@ -58,17 +61,18 @@ function App() {
             ]}
           />
           <Route
-            path="/about/:videoId"
+            path="/about/:videoId/"
             element={[
                 <Video/>,
             ]}
           />
           <Route
-            path="/about/:videoId/:playlistId"
+            path="/video-detail"
             element={[
-                <Video/>,
+                <Detailvideo/>,
             ]}
           />
+
           <Route path="/about_us" element = {[<About/>]} />
           <Route path="/Contact" element = {[<Contact/>]} />
           <Route path="/allvideos" element = {[<Allvideos/>]} />
