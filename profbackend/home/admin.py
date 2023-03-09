@@ -7,4 +7,8 @@ admin.site.register(StotraAndStutiCategory)
 admin.site.register(StotraAndStuti)
 admin.site.register(Category)
 admin.site.register(Video)
+admin.site.register(Comment)
+admin.site.register(Address)
+admin.site.register(Appointment)
+admin.site.register(SocialLinks)
 # Register your models here.
