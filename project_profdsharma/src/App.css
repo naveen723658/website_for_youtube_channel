@@ -272,6 +272,9 @@ div:hover {
 svg {
   fill: #cc1821 !important;
 }
+.sendbtn svg{
+  fill: #fff !important;
+}
 
 .item-center {
   position: absolute;

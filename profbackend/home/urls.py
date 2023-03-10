@@ -10,6 +10,7 @@ router.register(r'StotraAndStutiCategory', StotraAndStutiCategoryViewSet),
 router.register(r'StotraAndStuti', StotraAndStutiViewSet),
 router.register(r'video_category', CategorySerializerViewSet),
 router.register(r'video', VideoSerializerViewSet),
+router.register(r'comment', CommentViewSet),
 
 urlpatterns = [
     path('', include(router.urls)),

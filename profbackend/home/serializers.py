@@ -50,3 +50,16 @@ class VideoSerializer(serializers.ModelSerializer):
 
     def get_vid(self, obj):
         return self.context['request'].build_absolute_uri(obj.vid.url) if obj.vid else None
+    
+class CommentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('id', 'name', 'email', 'message', 'videoid' ,'update_at')
+        extra_kwargs = {
+            'update_at': {'read_only': True},
+        }
+        read_only_fields = ('id',)
+
+    def create(self, validated_data):
+        # print(validated_data)
+        return Comment.objects.create(**validated_data)

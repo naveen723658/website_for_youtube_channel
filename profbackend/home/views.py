@@ -1,6 +1,6 @@
 from django.shortcuts import render, HttpResponse
 from .serializers import *
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 from decouple import config
 import json
 from django.http import JsonResponse
@@ -9,14 +9,14 @@ from googleapiclient.errors import HttpError
 from django.core.cache import cache
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-
+from .models import *
 
 
 KEYLIST = config(
     "API_KEYS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 )
 CHANNEL_ID = config("CHANNEL_ID")
-
+Time_slot = 60 * 60 * 24 # for 24 hours or 1 day
 
 def check_api_key(api_key):
     try:
@@ -77,7 +77,7 @@ def video_detail_endpoint(request, video_id):
             id=video_id, part="snippet,statistics,localizations, contentDetails",
         )
         response = request.execute()
-        cache.set(cache_key, response, 60 * 60 * 24)
+        cache.set(cache_key, response, Time_slot)
     return JsonResponse(response)
 
 # related videos endpoint
@@ -95,7 +95,7 @@ def get_playlist_items(request, video_id):
                 maxResults=20
             )
         response = request.execute()
-        cache.set(cache_key, response, 60 * 60 * 24)
+        cache.set(cache_key, response, Time_slot)
         
     videos = []
     for video in response["items"]:
@@ -119,7 +119,7 @@ def get_comments(request, video_id, nextPageToken):
                 pageToken = nextPageToken
             )
         response = request.execute()
-        cache.set(cache_key, response, 60 * 60 * 24)
+        cache.set(cache_key, response, Time_slot)
 
     comments = []
 
@@ -147,32 +147,6 @@ def get_comments(request, video_id, nextPageToken):
     return JsonResponse({"items": comments, "nextPageToken": encoded_token})
 
 
-
-# def comments_endpoint(request, video_id):
-#     cache_key = f"comments_endpoint_{video_id}"
-#     response = cache.get(cache_key)
-#     if response is None:
-#         api_key = get_api_key()
-#         youtube = build("youtube", "v3", developerKey=api_key)
-#         request = youtube.commentThreads().list(
-#             videoId=video_id, maxResults=5, part="snippet"
-#         )
-#         response = request.execute()
-#         cache.set("comments_endpoint", response, 60 * 60 * 24)
-#     return JsonResponse(response)
-
-
-# def comments_replies_endpoint(request, parent_id):
-#     cache_key = f"comments_replies_endpoint_{parent_id}"
-#     response = cache.get(cache_key)
-#     if response is None:
-#         api_key = get_api_key()
-#         youtube = build("youtube", "v3", developerKey=api_key)
-#         request = youtube.comments().list(parentId=parent_id, part="snippet")
-#         response = request.execute()
-#         cache.set("comments_replies_endpoint", response, 60 * 60 * 24)
-#     return JsonResponse(response)
-
 def get_channel_videos(request, page_token):
     cache_key = f"channel_videos_{page_token}"
     response = cache.get(cache_key)
@@ -189,7 +163,6 @@ def get_channel_videos(request, page_token):
         )
         page_response = video_request.execute()
         video_id = ','.join([i['id']['videoId'] for i in page_response['items']])
-        # print(video_id)
         # Fetch statistics data for each video
         statistics_request = youtube.videos().list(id=video_id, part="statistics")
         statistics_response = statistics_request.execute()
@@ -213,7 +186,7 @@ def get_channel_videos(request, page_token):
             'items': video_items,
             'nextPageToken': page_response.get("nextPageToken", None)
         }
-        cache.set(cache_key, json.dumps(response), 60 * 60 * 24)
+        cache.set(cache_key, json.dumps(response), Time_slot)
     else:
         response = json.loads(response)
 
@@ -264,7 +237,7 @@ def get_playlists_and_statistics(request):
             'playlists':playlists_response,
             'playlistsitems': playlistsitems,
         }
-        cache.set(cache_key, response, 60 * 60 *24)
+        cache.set(cache_key, response, Time_slot)
     return JsonResponse(response)
 
 
@@ -285,22 +258,8 @@ def playlists_endpoint(request, page_token):
             part="snippet,localizations,contentDetails",
         )
         response = playlist_request.execute()
-        cache.set(cache_key, response, 60 * 60 * 24)
+        cache.set(cache_key, response, Time_slot)
     return JsonResponse(response)
-
-
-# def latest_videos_endpoint(request):
-#     cache_key = "latest_videos"
-#     response = cache.get(cache_key)
-#     if response is None:
-#         api_key = get_api_key()
-#         youtube = build("youtube", "v3", developerKey=api_key)
-#         request = youtube.search().list(
-#             part="snippet", channelId=CHANNEL_ID, order="date", maxResults=2
-#         )
-#         response = request.execute()
-#         cache.set(cache_key, response, 60 * 60)
-#     return JsonResponse(response)
 
 
 def stats(request):
@@ -313,7 +272,7 @@ def stats(request):
             part="brandingSettings, statistics, topicDetails", id=CHANNEL_ID
         )
         response = request.execute()
-        cache.set(cache_key, response, 60 * 60 * 24)
+        cache.set(cache_key, response, 60 * 60)
     return JsonResponse(response)
 
 
@@ -330,7 +289,7 @@ def playlist_items_endpoint(request, playlist_id, max_results):
             playlistId=playlist_id, maxResults=max_results, part="snippet"
         )
         response = request.execute()
-        cache.set(cache_key, response, 60 * 60)
+        cache.set(cache_key, response, Time_slot)
     return JsonResponse(response)
 
 
@@ -395,3 +354,8 @@ class VideoSerializerViewSet(viewsets.ReadOnlyModelViewSet):
         result_page = paginator.paginate_queryset(videos, request)
         serializer = self.serializer_class(result_page, many=True, context={'request': request})
         return paginator.get_paginated_response(serializer.data)
+    
+class CommentViewSet(viewsets.ModelViewSet):
+    queryset = Comment.objects.all()
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.AllowAny]

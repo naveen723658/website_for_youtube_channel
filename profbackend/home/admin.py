@@ -11,4 +11,5 @@ admin.site.register(Comment)
 admin.site.register(Address)
 admin.site.register(Appointment)
 admin.site.register(SocialLinks)
+admin.site.register(AboutUs)
 # Register your models here.

@@ -6,35 +6,51 @@ import axios from "axios";
 import { useParams, Link } from "react-router-dom";
 import Topheader from "./Topheader";
 
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
+import TextField from "@mui/material/TextField";
+import { MdSend } from "react-icons/md";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
+
 const Video = () => {
   const parser = new HtmlToReact.Parser();
-
   const parm = useParams();
   const VIDEO_ID = parm.videoId;
   const [Playlist, setPlaylist] = useState(null);
   const [playlistData, setPlaylistData] = useState([]);
   const [videodetail, setvideodetail] = useState([]);
   const [commentdata, setcommentdata] = useState([]);
+  const [webcommentdata, setwebcommentdata] = useState([]);
 
-  const textareaRef = useRef(null);
-  const [backUp, setBackUp] = useState("Add Your Comment");
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const [showBtn, setShowBtn] = useState(false);
+  const [value, setValue] = useState('');
+
+  const handleChange = (event) => {
+    event.preventDefault();
+    setValue(event.target.value);
+  };
 
   const handleFocus = () => {
-    setBackUp("");
-    textareaRef.current.style.borderColor = "#333";
     setShowBtn(true);
   };
-
-  const handleBlur = () => {
-    setBackUp("Add Your Comment");
-    textareaRef.current.style.borderColor = "#aaa";
-  };
-
   const handleClear = (e) => {
     e.preventDefault();
     setShowBtn(false);
-    textareaRef.current.value = "";
+    setValue("");
   };
 
   const fetchData = async () => {
@@ -43,7 +59,6 @@ const Video = () => {
       const videodetails = await axios.get(
         `http://127.0.0.1:8000/video_detail/${VIDEO_ID}`
       );
-      console.log(videodetails.data);
       setvideodetail(videodetails.data.items);
       // Playlist Items
       const playlistVideos = await axios.get(
@@ -56,6 +71,15 @@ const Video = () => {
         `http://127.0.0.1:8000/comments/${VIDEO_ID}/`
       );
       setcommentdata(comments.data);
+
+      // web comments
+      const webcomments = await axios.get(
+        `http://127.0.0.1:8000/home/comment/`
+      );
+      // console.log(webcomments.data.filter((item) => item.videoid === VIDEO_ID));
+      setwebcommentdata(
+        webcomments.data.filter((item) => item.videoid === VIDEO_ID)
+      );
 
       // Playlist
       const playlist = await axios.get(`http://127.0.0.1:8000/playlists/`);
@@ -101,7 +125,7 @@ const Video = () => {
                 <h5 className="d-flex align-item-center ">
                   <FaBook />{" "}
                   <div className="mx-2">
-                    {videodetail[0].statistics.commentCount} Comments
+                    {Number(videodetail[0].statistics.commentCount) + Number(webcommentdata.length)} Comments
                   </div>
                 </h5>
               </div>
@@ -120,32 +144,98 @@ const Video = () => {
                       <FaBook /> <div className="mx-2">Post Your Comment</div>
                     </h5>
                   </div>
-                  <textarea
-                    ref={textareaRef}
-                    placeholder={backUp}
+                  <TextField
                     onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    id="standard-basic"
+                    variant="standard"
+                    className="w-100 mb-2"
+                    label="Add Your Comment..."
+                    value={value}
+                    onChange={handleChange}
                   />
                   {showBtn && (
                     <div className="btn">
-                      <input
+                      <button
                         className="btn btn-sm btn-primary mr-2"
-                        type="submit"
-                        defaultValue="Comment"
-                      />
+                        onClick={(e) => {
+                          handleOpen();
+                          e.preventDefault();
+                        }}
+                      >
+                        submit
+                      </button>
                       <button
                         className="btn btn-sm btn-warning"
                         id="clear"
-                        href="#"
                         onClick={handleClear}
                       >
                         Cancel
                       </button>
+                      <Modal
+                        open={open}
+                        onClose={handleClose}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box
+                          component="form"
+                          noValidate
+                          autoComplete="off"
+                          sx={style}
+                        >
+                          <div className="">
+                            <h5 className="text-center mb-4">
+                              Verify Your Identity
+                            </h5>
+                            <div className="mb-4">
+                              <TextField className="w-100" label="Your Name" />
+                            </div>
+                            <div className="mb-4">
+                              <TextField
+                                // error
+                                className="w-100"
+                                label="Email address"
+                                // helperText="Incorrect entry."
+                              />
+                            </div>
+                          </div>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            className="w-100 sendbtn"
+                            endIcon={<MdSend />}
+                          >
+                            Send OTP
+                          </Button>
+                        </Box>
+                      </Modal>
                     </div>
                   )}
                 </form>
               </div>
               <div className="comment-container my-4">
+                {webcommentdata.length > 0 &&
+                  webcommentdata.map((data, index) => (
+                    <>
+                      <div className="comment-box row mx-0" key={index}>
+                        <div className="col-2 img">
+                          <span>
+                            <FaUser />
+                          </span>
+                        </div>
+                        <div className="col-10 detaila">
+                          <h6>
+                            {data.name}
+                            <small className="mx-2">
+                              <span>posted on:</span>
+                              {data.update_at.slice(0, 10)}
+                            </small>
+                          </h6>
+                          <p>{data.message}</p>
+                        </div>
+                      </div>
+                    </>
+                  ))}
                 {commentdata.items &&
                   commentdata.items.map((data, index) => (
                     <>

@@ -97,7 +97,7 @@ class BaseForm(models.Model):
 
 class Comment(BaseForm):
     message = models.TextField(verbose_name=("Comment"))
-
+    videoid = models.CharField(verbose_name=("Video ID"), max_length=50, default="None")
     def __str__(self):
         return self.name + " | " + self.email
     
@@ -113,3 +113,7 @@ class SocialLinks(models.Model):
     instagram = models.CharField(verbose_name=("Instagram Account"), max_length=254, null=True, blank=True)
     youtube = models.CharField(verbose_name=("Youtube Account"), max_length=254, null=True, blank=True)
     linkedin = models.CharField(verbose_name=("Linkedin Account"), max_length=254, null=True, blank=True)
+
+class AboutUs(models.Model):
+    about = models.TextField(verbose_name=("About"))
+    img = models.ImageField(verbose_name=("Image"), upload_to=None, height_field=None, width_field=None, max_length=None)  
