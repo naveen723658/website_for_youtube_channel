@@ -1,7 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 import Topheader from "./Topheader";
-
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import { MdSend } from "react-icons/md";
+import dayjs, { Dayjs } from "dayjs";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import Box from "@mui/material/Box";
+import Modal from "@mui/material/Modal";
+const style = {
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 400,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  p: 4,
+};
 const Contact = () => {
+  // const [value, setValue] = useState < Dayjs | null>(dayjs('2022-04-17T15:30'));
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   return (
     <>
       <Topheader title="Contact US" subtitle="Contact US" />
@@ -17,74 +41,71 @@ const Contact = () => {
         <div className="container">
           <div className="row">
             <div style={{ padding: "20px" }} className="col-sm-7">
-              <h2>Contact Form</h2>
+              <h2>Book an Appointment</h2>
               <br />
-              <div className="row cont-row">
-                <div className="col-sm-3">
-                  <label>Enter Name </label>
-                  <span>:</span>
-                </div>
-                <div className="col-sm-8">
-                  <input
-                    type="text"
-                    placeholder="Enter Name"
-                    name="name"
-                    className="form-control input-sm"
-                  />
-                </div>
+              <div className="mb-4">
+                <TextField className="w-100" label="Your Name" />
               </div>
-              <div className="row cont-row">
-                <div className="col-sm-3">
-                  <label>Email Address </label>
-                  <span>:</span>
-                </div>
-                <div className="col-sm-8">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter Email Address"
-                    className="form-control input-sm"
-                  />
-                </div>
+              <div className="mb-4">
+                <TextField className="w-100" label="Email Address" />
               </div>
-              <div className="row cont-row">
-                <div className="col-sm-3">
-                  <label>Mobile Number</label>
-                  <span>:</span>
-                </div>
-                <div className="col-sm-8">
-                  <input
-                    type="text"
-                    name="name"
-                    placeholder="Enter Mobile Number"
-                    className="form-control input-sm"
-                  />
-                </div>
+              <div className="mb-4">
+                <TextField className="w-100" label="Mobile Number" />
               </div>
-              <div className="row cont-row">
-                <div className="col-sm-3">
-                  <label>Enter Message</label>
-                  <span>:</span>
-                </div>
-                <div className="col-sm-8">
-                  <textarea
-                    rows={5}
-                    placeholder="Enter Your Message"
-                    className="form-control input-sm"
-                    defaultValue={""}
-                  />
-                </div>
+              <div className="mb-4">
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    components={["DateTimePicker", "DateTimePicker"]}
+                  >
+                    <DateTimePicker
+                      label="Select Date & Time"
+                      // onChange={(newValue) => setValue(newValue)}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
               </div>
-              <div style={{ marginTop: "10px" }} className="row">
-                <div style={{ paddingTop: "10px" }} className="col-sm-3">
-                  <label />
-                </div>
-                <div className="col-sm-8">
-                  <button className="btn btn-danger btn-sm">
-                    Send Message
-                  </button>
-                </div>
+              <div className="mb-4">
+                <TextField className="w-100" label="Enter Message" />
               </div>
+              <div className="mb-4">
+                <Button
+                  className="w-100 sendbtn button"
+                  endIcon={<MdSend />}
+                  onClick={(e) => {
+                    handleOpen();
+                    e.preventDefault();
+                  }}
+                >
+                  Send Message
+                </Button>
+              </div>
+
+              <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+              >
+                <Box component="form" noValidate autoComplete="off" sx={style}>
+                  <div className="">
+                    <h5 className="text-center">Verify Your Identity</h5>
+                    <p className="mb-4">An otp has been send to your email address</p>
+                    <div className="mb-4">
+                      <TextField
+                        // error
+                        className="w-100"
+                        label="Enter the OTP"
+                        // helperText="Incorrect entry."
+                      />
+                    </div>
+                  </div>
+                  <Button
+                    className="w-100 sendbtn button"
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </Modal>
             </div>
             <div className="col-sm-5">
               <div style={{ margin: "50px" }} className="serv">
@@ -98,9 +119,9 @@ const Contact = () => {
                 <br />
                 +91 9582248029
                 <br />
-                +91 8130948703 
+                +91 8130948703
                 <br />
-                 Email:shriindrakshidhaam@gmail.com
+                Email:shriindrakshidhaam@gmail.com
                 <br />
                 Website:https://profdharmendersharma.com/
                 <br />

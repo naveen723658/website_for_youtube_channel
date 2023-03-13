@@ -2,10 +2,26 @@ import react, { useState, useEffect } from "react";
 import { Outlet, Link } from "react-router-dom";
 import { FaEnvelope, FaClock } from "react-icons/fa";
 import axios from "axios";
+
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import AdbIcon from "@mui/icons-material/Adb";
+
 let text1 =
   "For any kind of astrological consultation from Prof. Dharmender Sharma ji or making of Vedic birth chart Contact:- +91-8587924072 9268319743 9582248029 8130948703";
 let text2 =
   "प्रो.धर्मेन्द्र शर्मा जी से किसी भी प्रकार के ज्योतिषीय परामर्श या वैदिक जन्मपत्रिका निर्माण हेतु  संपर्क करें:- +91-8587924072 9268319743 9582248029 8130948703";
+
 const Navbar = () => {
   const navitems = [
     {
@@ -43,16 +59,14 @@ const Navbar = () => {
   const [headerData, setHeaderData] = useState([]);
   const [contactData, setContactData] = useState([]);
   const [EmailData, setEmailData] = useState([]);
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const [anchorElNav, setAnchorElNav] = useState(null);
 
-  const handleClick = () => {
-    setMobileNavOpen(!mobileNavOpen);
-  };
   useEffect(() => {
     axios
       .get("http://127.0.0.1:8000/home/header/")
       .then((res) => {
         setHeaderData(res.data);
+        console.log(res.data)
       })
       .catch((error) => {
         console.log(error);
@@ -74,6 +88,13 @@ const Navbar = () => {
         console.log(error);
       });
   }, []);
+
+  const handleOpenNavMenu = (event) => {
+    setAnchorElNav(event.currentTarget);
+  };
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+  };
 
   return (
     <>
@@ -122,42 +143,116 @@ const Navbar = () => {
           </div>
         </div>
         <div className="header-bottom">
-          <div className="container">
-            <div className="nav-wrapper">
-              <nav className="navbar">
-                {headerData &&
-                  headerData.map((data, index) => (
-                    <img className="logo" key={index} src={data.logo} alt="" />
+          <AppBar position="static" className="bg-light text-dark">
+            <Toolbar
+              disableGutters
+              className="container justify-content-between"
+            >
+              {/* {headerData &&
+                headerData.map((data, index) => (
+                  
+                 
+                ))
+              } */}
+
+              {headerData.length > 0 ? (
+                <img className="logo" src={headerData[0].logo} alt="" />
+              ) : (
+                <AdbIcon sx={{ display: "flex", mr: 1 }} />
+              )}
+
+              {/* <Typography
+                variant="h5"
+                noWrap
+                component="a"
+                href=""
+                sx={{
+                  mr: 2,
+                  display: { xs: "flex", md: "none" },
+                  flexGrow: 1,
+                  fontFamily: "monospace",
+                  fontWeight: 700,
+                  letterSpacing: ".3rem",
+                  color: "inherit",
+                  textDecoration: "none",
+                }}
+              >
+                LOGO
+              </Typography> */}
+              <Box
+                sx={{
+                  flexGrow: 1,
+                  display: { xs: "none", md: "flex", justifyContent: "end" },
+                }}
+              >
+                {navitems &&
+                  navitems.map((item, index) => (
+                    <>
+                      <Link to={item.path} key={item.id}>
+                        <Typography
+                          sx={{
+                            p: 2,
+                            border: "none",
+                            display: "block",
+                          }}
+                          textAlign="end"
+                        >
+                          {item.pathName}
+                        </Typography>
+                      </Link>
+                    </>
                   ))}
-                <div
-                  className="menu-toggle"
-                  onClick={handleClick}
-                  id="mobile-menu"
+              </Box>
+
+              {/* mobile navbar */}
+              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
+                <IconButton
+                  sx={{ outline: "none !important" }}
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleOpenNavMenu}
+                  color="inherit"
                 >
-                  <span className="bar" />
-                  <span className="bar" />
-                  <span className="bar" />
-                </div>
-                <ul
-                  className={`nav no-search ${
-                    mobileNavOpen ? "mobile-nav" : ""
-                  }`}
-                  key={1110}
+                  <MenuIcon />
+                </IconButton>
+                <Menu
+                  id="menu-appbar"
+                  anchorEl={anchorElNav}
+                  anchorOrigin={{
+                    vertical: "bottom",
+                    horizontal: "left",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  open={Boolean(anchorElNav)}
+                  onClose={handleCloseNavMenu}
+                  sx={{
+                    display: { xs: "block", md: "none" },
+                  }}
                 >
                   {navitems &&
                     navitems.map((item, index) => (
                       <>
-                        <li className="nav-item" key={index}>
-                          <Link to={item.path} key={item.id}>
+                        <MenuItem
+                          key={item.pathName}
+                          onClick={handleCloseNavMenu}
+                        >
+                          <Typography textAlign="start">
                             {item.pathName}
-                          </Link>
-                        </li>
+                          </Typography>
+                        </MenuItem>
                       </>
                     ))}
-                </ul>
-              </nav>
-            </div>
-          </div>
+                </Menu>
+              </Box>
+            </Toolbar>
+          </AppBar>
+
           <div className="grad-bar" />
         </div>
       </header>

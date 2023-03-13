@@ -28,8 +28,8 @@ class Header(models.Model):
     def clean(self):
         super().clean()
         if self.logo:
-            if self.logo.size > 500*500:
-                raise ValidationError("The logo image size must be less than 500*500 pixels.")
+            if self.logo.size > 250*250:
+                raise ValidationError("The logo image size must be less than 250*250 pixels.")
             if not os.path.splitext(self.logo.name)[1] in ['.png', '.jpg', '.jpeg']:
                 raise ValidationError("The logo image must be in PNG, JPG, or JPEG format.")
             if len(self.logo.name) > 20:

@@ -200,9 +200,7 @@ const Video = () => {
                             </div>
                           </div>
                           <Button
-                            variant="contained"
-                            color="primary"
-                            className="w-100 sendbtn"
+                            className="w-100 sendbtn button"
                             endIcon={<MdSend />}
                           >
                             Send OTP
