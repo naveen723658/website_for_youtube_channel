@@ -59,8 +59,8 @@ class Hero(models.Model):
     desc = models.CharField(verbose_name=("Short Title"), max_length=70, null=True, blank=True)
 
 class StotraAndStutiCategory(models.Model):
-    title = models.CharField(verbose_name="Title", max_length=50, unique=True)
-    desc = models.TextField(verbose_name="Short Description", max_length=200)
+    title = models.CharField(verbose_name="Title", max_length=100, unique=True)
+    desc = models.TextField(verbose_name="Short Description", max_length=500)
     def __str__(self):
         return self.title
     

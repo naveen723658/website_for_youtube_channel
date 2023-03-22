@@ -66,7 +66,7 @@ const Navbar = () => {
       .get("http://127.0.0.1:8000/home/header/")
       .then((res) => {
         setHeaderData(res.data);
-        console.log(res.data)
+        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -148,37 +148,12 @@ const Navbar = () => {
               disableGutters
               className="container justify-content-between"
             >
-              {/* {headerData &&
-                headerData.map((data, index) => (
-                  
-                 
-                ))
-              } */}
-
               {headerData.length > 0 ? (
                 <img className="logo" src={headerData[0].logo} alt="" />
               ) : (
                 <AdbIcon sx={{ display: "flex", mr: 1 }} />
               )}
 
-              {/* <Typography
-                variant="h5"
-                noWrap
-                component="a"
-                href=""
-                sx={{
-                  mr: 2,
-                  display: { xs: "flex", md: "none" },
-                  flexGrow: 1,
-                  fontFamily: "monospace",
-                  fontWeight: 700,
-                  letterSpacing: ".3rem",
-                  color: "inherit",
-                  textDecoration: "none",
-                }}
-              >
-                LOGO
-              </Typography> */}
               <Box
                 sx={{
                   flexGrow: 1,
@@ -205,7 +180,7 @@ const Navbar = () => {
               </Box>
 
               {/* mobile navbar */}
-              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } }}>
+              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } , cursor:"pointer" }}>
                 <IconButton
                   sx={{ outline: "none !important" }}
                   size="large"
@@ -214,6 +189,7 @@ const Navbar = () => {
                   aria-haspopup="true"
                   onClick={handleOpenNavMenu}
                   color="inherit"
+                  
                 >
                   <MenuIcon />
                 </IconButton>
@@ -238,14 +214,18 @@ const Navbar = () => {
                   {navitems &&
                     navitems.map((item, index) => (
                       <>
-                        <MenuItem
-                          key={item.pathName}
-                          onClick={handleCloseNavMenu}
-                        >
-                          <Typography textAlign="start">
+                        <Link to={item.path} key={item.id}>
+                          <Typography
+                            sx={{
+                              p: 2,
+                              border: "none",
+                              display: "block",
+                            }}
+                            textAlign="start"
+                          >
                             {item.pathName}
                           </Typography>
-                        </MenuItem>
+                        </Link>
                       </>
                     ))}
                 </Menu>

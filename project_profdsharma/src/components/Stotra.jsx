@@ -46,7 +46,7 @@ const Stotra = () => {
           <div className="main-video-container">
               {cetegory.map((data, index) => (
                 <>
-                  <div className="my-4 py-4 text-center" key={index}>
+                  <div className="my-4 text-center" key={index}>
                     <h4 className="text-danger">{data.title}</h4>
                     <p style={{ textAlign: "justify", fontWeight: "bold" }}>
                       {data.desc}
