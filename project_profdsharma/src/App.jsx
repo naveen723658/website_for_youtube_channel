@@ -18,7 +18,7 @@ import Recent from "./components/Recent";
 import Stotra from "./components/Stotra";
 import Public from "./components/Public";
 import Live from "./components/Live";
-import Seminar from "./components/Seminar";
+// import Seminar from "./components/Seminar";
 import Frontvideo from "./components/Frontvideo";
 import Detailvideo from "./components/Detailvideo";
 function App() {
@@ -77,8 +77,8 @@ function App() {
           <Route path="/Contact" element = {[<Contact/>]} />
           <Route path="/allvideos" element = {[<Allvideos/>]} />
           <Route path="/stotra-and-stuti" element = {[<Stotra/>]} />
-          <Route path="/public-opinion" element = {[<Public/>]} />
-          <Route path="/seminar" element = {[<Seminar/>]} />
+          <Route path="/public-opinion" element = {[<Public category={"Public Opinion"} title={"Public Opinion"} subtitle={"Public Opinion"}/>]} />
+          <Route path="/seminar" element = {[<Public category={"Glimpse of Our Seminar"} title={"Glimpse of Our Seminar"} subtitle={"Glimpse of Our Seminar"}/>]} />
 
         </Routes>
         <Footer />

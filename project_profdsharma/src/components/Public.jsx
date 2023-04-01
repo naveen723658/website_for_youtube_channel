@@ -32,7 +32,7 @@ const style = {
   p: 4,
 };
 
-const Public = () => {
+const Public = ({category, title, subtitle}) => {
   const [video, setvideo] = useState([]);
   const [pageToken, setPageToken] = useState("1");
   const [Token, setToken] = useState("None");
@@ -49,7 +49,7 @@ const Public = () => {
     axios
       .get(`http://127.0.0.1:8000/home/video/?page=${pageToken}`)
       .then((res) => {
-        const { results, next } = res.data;
+        const { results, next } = res.data;        
         setvideo([...video, ...results]);
         setToken(getPageNumberFromUrl(next));
         if (next === null) {
@@ -66,8 +66,8 @@ const Public = () => {
     <>
       <section>
         <Topheader
-          title="Public Opinion"
-          subtitle="Public Opinion"
+          title={title}
+          subtitle={subtitle}
           address=""
         />
         <main>
@@ -76,7 +76,7 @@ const Public = () => {
               <div className="py-4 container-fluid">
                 <div className="container">
                   <div className="video-row row  justify-content-center">
-                    {video.map((data, index) => (
+                    {video.filter((item) => item.playlist.text === category).map((data, index) => (
                       <div
                         className="col-lg-3 col-md-4 col-sm-6 p-2"
                         key={index}

@@ -66,7 +66,6 @@ const Navbar = () => {
       .get("http://127.0.0.1:8000/home/header/")
       .then((res) => {
         setHeaderData(res.data);
-        console.log(res.data);
       })
       .catch((error) => {
         console.log(error);

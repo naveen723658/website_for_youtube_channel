@@ -212,7 +212,7 @@ def get_playlists_and_statistics(request):
         for ids in playlists_response['items']:
             playlist_items_request = youtube.playlistItems().list(
                 playlistId=ids['id'], part="snippet, contentDetails",
-                maxResults=4,
+                maxResults=8,
             )
             playlist_items_response = playlist_items_request.execute()
             playlistsitems.extend(playlist_items_response.get("items", []))
@@ -338,18 +338,13 @@ class CategorySerializerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
-# class VideoSerializerViewSet(viewsets.ReadOnlyModelViewSet):
-#     queryset = Video.objects.all()
-#     paginator = Paginator(queryset, 2)
-#     serializer_class = VideoSerializer
-
 class VideoSerializerViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Video.objects.all()
     serializer_class = VideoSerializer
 
     def list(self, request, *args, **kwargs):
         paginator = PageNumberPagination()
-        paginator.page_size = 2 # 2 objects per page
+        paginator.page_size = 12 # 2 objects per page
         videos = self.queryset
         result_page = paginator.paginate_queryset(videos, request)
         serializer = self.serializer_class(result_page, many=True, context={'request': request})

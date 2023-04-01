@@ -28,8 +28,8 @@ class Header(models.Model):
     def clean(self):
         super().clean()
         if self.logo:
-            if self.logo.size > 250*250:
-                raise ValidationError("The logo image size must be less than 250*250 pixels.")
+            # if self.logo.size > 250*250:
+            #     raise ValidationError("The logo image size must be less than 250*250 pixels.")
             if not os.path.splitext(self.logo.name)[1] in ['.png', '.jpg', '.jpeg']:
                 raise ValidationError("The logo image must be in PNG, JPG, or JPEG format.")
             if len(self.logo.name) > 20:
@@ -40,8 +40,8 @@ class Header(models.Model):
             if image.format not in ['PNG', 'JPEG', 'JPG']:
                 raise ValidationError("The logo image must be in PNG, JPG, or JPEG format.")
         if self.favicon:
-            if self.favicon.size > 32*32:
-                raise ValidationError("The favicon image size must be less than 32x32 pixels.")
+            # if self.favicon.size > 32*32:
+            #     raise ValidationError("The favicon image size must be less than 32x32 pixels.")
             if not os.path.splitext(self.favicon.name)[1] in ['.png', '.jpg', '.jpeg']:
                 raise ValidationError("The favicon image must be in PNG, JPG, or JPEG format.")
             if len(self.favicon.name) > 20:
