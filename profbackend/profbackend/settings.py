@@ -80,26 +80,12 @@ WSGI_APPLICATION = "profbackend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": config("DEFAULT_DB_ENGINE"),
-#         "NAME": BASE_DIR / config("DDB_NAME"),
-#     }
-# }
-
-DATABASES = {  
-    'default': {  
-        'ENGINE': 'django.db.backends.mysql',  
-        'NAME': config("DB_NAME"),  
-        'USER': config("DB_USER"),  
-        'PASSWORD': config("DB_PASSWORD"),  
-        'HOST': config("DB_HOST"),  
-        'PORT': '3306',  
-        'OPTIONS': {  
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'"  
-        } 
-    }  
-}  
+DATABASES = {
+    "default": {
+        "ENGINE": config("DEFAULT_DB_ENGINE"),
+        "NAME": BASE_DIR / config("DDB_NAME"),
+    }
+}
 
 
 # Password validation
@@ -150,11 +136,11 @@ AWS_DEFAULT_ACL = 'public-read'
 AWS_S3_VERITY = True
 AWS_S3_FILE_OVERWRITE = False
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
-DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
 STATIC_URL = "/static/"
-# MEDIA_URL = "/media/"
-# MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 STATIC_ROOT = BASE_DIR / "static"
 # STATICFILES_DIRS = [
 #     BASE_DIR / "static",
