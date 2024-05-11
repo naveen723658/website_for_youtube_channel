@@ -21,6 +21,7 @@ import Live from "./components/Live";
 // import Seminar from "./components/Seminar";
 import Frontvideo from "./components/Frontvideo";
 import Detailvideo from "./components/Detailvideo";
+import Seminar from "./components/seminar";
 function App() {
   const [latestVideos, setLatestVideos] = useState([]);
   const [playlistsData, setPlaylistsData] = useState([]);
@@ -30,7 +31,7 @@ function App() {
   //     'http://127.0.0.1:8000/latest_videos/'
   //   );
   //   setLatestVideos(latestUploads.data);
-    
+
   //   const playlists = await axios.get(
   //     'http://127.0.0.1:8000/playlists/'
   //   );
@@ -40,46 +41,34 @@ function App() {
   // useEffect(() => {
   //   fetchData();
   // }, [ ]);
-  
- 
+
   return (
     <>
       <BrowserRouter>
         <Navbar />
-        <StickyIcons/>
+        <StickyIcons />
         <Routes>
           <Route
             path="/"
             element={[
               <Hero herodata={latestVideos} />,
-              <Frontvideo/>,
-              <Recent/>,
+              <Frontvideo />,
+              <Recent />,
               <Latest />,
-              <Stats/>,
+              <Stats />,
               <Category />,
-              <Live />
+              <Live />,
             ]}
           />
-          <Route
-            path="/about/:videoId/"
-            element={[
-                <Video/>,
-            ]}
-          />
-          <Route
-            path="/video-detail"
-            element={[
-                <Detailvideo/>,
-            ]}
-          />
+          <Route path="/about/:videoId/" element={[<Video />]} />
+          <Route path="/video-detail" element={[<Detailvideo />]} />
 
-          <Route path="/about_us" element = {[<About/>]} />
-          <Route path="/Contact" element = {[<Contact/>]} />
-          <Route path="/allvideos" element = {[<Allvideos/>]} />
-          <Route path="/stotra-and-stuti" element = {[<Stotra/>]} />
-          <Route path="/public-opinion" element = {[<Public category={"Public Opinion"} title={"Public Opinion"} subtitle={"Public Opinion"}/>]} />
-          <Route path="/seminar" element = {[<Public category={"Glimpse of Our Seminar"} title={"Glimpse of Our Seminar"} subtitle={"Glimpse of Our Seminar"}/>]} />
-
+          <Route path="/about_us" element={[<About />]} />
+          <Route path="/Contact" element={[<Contact />]} />
+          <Route path="/allvideos" element={[<Allvideos />]} />
+          <Route path="/stotra-and-stuti" element={[<Stotra />]} />
+          <Route path="/public-opinion" element={[<Public />]} />
+          <Route path="/seminar" element={[<Seminar />]} />
         </Routes>
         <Footer />
       </BrowserRouter>

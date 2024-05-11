@@ -105,6 +105,7 @@ const Video = () => {
     return paragraphs.join("\n");
   }
 
+  console.log(playlistData);
   return (
     <>
       {videodetail[0] && (

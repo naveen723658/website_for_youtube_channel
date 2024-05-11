@@ -1522,3 +1522,17 @@ ol li {
   opacity: 100%;
 }
 
+
+
+
+.vjs-custom .vjs-big-play-button {
+  width: 3rem !important;
+  height: 3rem !important;
+  border-radius: 50% !important;
+  background-color: transparent !important;
+  position: absolute !important;
+  margin: 0 !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+}

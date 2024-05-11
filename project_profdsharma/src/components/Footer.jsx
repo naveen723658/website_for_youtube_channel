@@ -229,8 +229,8 @@ const Footer = () => {
                   {EmailData && (
                     <div className="kilimanjaro_single_contact_info mt-4">
                       <h5 className="mb-2">Email:</h5>
-                      {EmailData.map((value) => (
-                        <p>
+                      {EmailData.map((value, _) => (
+                        <p key={_}>
                           <span className="mr-2 item-cente">
                             <FaEnvelope />
                           </span>

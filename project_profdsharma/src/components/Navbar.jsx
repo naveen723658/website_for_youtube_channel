@@ -16,6 +16,7 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
+import React from "react";
 
 let text1 =
   "For any kind of astrological consultation from Prof. Dharmender Sharma ji or making of Vedic birth chart Contact:- +91-8587924072 9268319743 9582248029 8130948703";
@@ -107,7 +108,7 @@ const Navbar = () => {
                     <span className="ml-0 mr-2 icon">
                       <FaEnvelope />
                     </span>
-                    {EmailData && EmailData.map((value) => <>{value.email}</>)}
+                    {EmailData && EmailData.map((value, _) => <React.Fragment key={_}>{value.email}</React.Fragment>)}
                     <span>|</span>
                   </li>
                   <li className="m-auto ml-md-0 " key={151}>
@@ -147,12 +148,7 @@ const Navbar = () => {
               disableGutters
               className="container justify-content-between"
             >
-              {headerData.length > 0 ? (
-                <img className="logo" src={headerData[0].logo} alt="" />
-              ) : (
-                <AdbIcon sx={{ display: "flex", mr: 1 }} />
-              )}
-
+              <img className="logo" src="/assets/images/logo.png" alt="" />
               <Box
                 sx={{
                   flexGrow: 1,
@@ -161,25 +157,29 @@ const Navbar = () => {
               >
                 {navitems &&
                   navitems.map((item, index) => (
-                    <>
-                      <Link to={item.path} key={item.id}>
-                        <Typography
-                          sx={{
-                            p: 2,
-                            border: "none",
-                            display: "block",
-                          }}
-                          textAlign="end"
-                        >
-                          {item.pathName}
-                        </Typography>
-                      </Link>
-                    </>
+                    <Link to={item.path} key={item.id + index}>
+                      <Typography
+                        sx={{
+                          p: 2,
+                          border: "none",
+                          display: "block",
+                        }}
+                        textAlign="end"
+                      >
+                        {item.pathName}
+                      </Typography>
+                    </Link>
                   ))}
               </Box>
 
               {/* mobile navbar */}
-              <Box sx={{ flexGrow: 0, display: { xs: "flex", md: "none" } , cursor:"pointer" }}>
+              <Box
+                sx={{
+                  flexGrow: 0,
+                  display: { xs: "flex", md: "none" },
+                  cursor: "pointer",
+                }}
+              >
                 <IconButton
                   sx={{ outline: "none !important" }}
                   size="large"
@@ -188,7 +188,6 @@ const Navbar = () => {
                   aria-haspopup="true"
                   onClick={handleOpenNavMenu}
                   color="inherit"
-                  
                 >
                   <MenuIcon />
                 </IconButton>
@@ -212,20 +211,18 @@ const Navbar = () => {
                 >
                   {navitems &&
                     navitems.map((item, index) => (
-                      <>
-                        <Link to={item.path} key={item.id}>
-                          <Typography
-                            sx={{
-                              p: 2,
-                              border: "none",
-                              display: "block",
-                            }}
-                            textAlign="start"
-                          >
-                            {item.pathName}
-                          </Typography>
-                        </Link>
-                      </>
+                      <Link to={item.path} key={index}>
+                        <Typography
+                          sx={{
+                            p: 2,
+                            border: "none",
+                            display: "block",
+                          }}
+                          textAlign="start"
+                        >
+                          {item.pathName}
+                        </Typography>
+                      </Link>
                     ))}
                 </Menu>
               </Box>

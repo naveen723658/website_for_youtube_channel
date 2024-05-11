@@ -74,8 +74,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "profbackend.wsgi.application"
-
+WSGI_APPLICATION = 'profbackend.wsgi.app'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
