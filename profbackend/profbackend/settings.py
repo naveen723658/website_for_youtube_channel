@@ -25,7 +25,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['.vercel.app','.now.sh','localhost','api.shriindrakshidhaam.com','shriindrakshidhaam.com','127.0.0.1']
+ALLOWED_HOSTS = ['localhost','shriindrakshidhaam.com','127.0.0.1']
 # ALLOWED_HOSTS = config(
 #     "ALLOWED_HOSTS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 # )
@@ -126,16 +126,16 @@ USE_TZ = True
 STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-# STATIC_ROOT = [BASE_DIR / "staticfiles_build" , "static"]
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_ROOT = [BASE_DIR / "staticfiles_build" , "static"]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173','https://api.shriindrakshidhaam.com','https://shriindrakshidhaam.com','http://127.0.0.1:5173']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173','https://shriindrakshidhaam.com','http://127.0.0.1:5173']
 # CORS_ALLOWED_ORIGINS = config(
 #     "CORS_ALLOWED_ORIGINS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 # )
