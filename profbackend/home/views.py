@@ -11,12 +11,15 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from .models import *
 
-
 KEYLIST = config(
     "API_KEYS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 )
 CHANNEL_ID = config("CHANNEL_ID")
 Time_slot = 60 * 60 * 24 # for 24 hours or 1 day
+
+# writen http response
+def home(request):
+    return HttpResponse("Working!!!!", content_type="text/plain")
 
 def check_api_key(api_key):
     try:

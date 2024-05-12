@@ -21,6 +21,7 @@ from home.views import *
 urlpatterns = [
     path('admin', admin.site.urls),
     path('home/', include('home.urls')),
+    path('',home),
     path('playlists/<page_token>/', playlists_endpoint),
     # related video
     path('playlistsitem/<video_id>/', get_playlist_items),
