@@ -122,35 +122,20 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 
-AWS_ACCESS_KEY_ID = config("aws_access_key_id")
-AWS_SECRET_ACCESS_KEY = config("aws_secret_access_key")
-AWS_STORAGE_BUCKET_NAME = config("aws_storage_bucket_name")
-AWS_S3_SIGNATURE_NAME = 's3v4'
-AWS_S3_REGION_NAME = 'ap-south-1'
-# AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-AWS_S3_OBJECT_PARAMETERS = {
-    'CacheControl': 'max-age=86400',
-}
-AWS_DEFAULT_ACL = 'public-read'
-AWS_S3_VERITY = True
-AWS_S3_FILE_OVERWRITE = False
-# STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
-
 STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-STATIC_ROOT = BASE_DIR / "staticfiles_build"
-STATICFILES_DIRS = [
-    BASE_DIR / "static",
-]
+STATIC_ROOT = [BASE_DIR / "staticfiles_build" , "static"]
+# STATICFILES_DIRS = [
+#     BASE_DIR / "static",
+# ]
 
 
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = config(
-    "CORS_ALLOWED_ORIGINS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
+    "CORS_ALLOWED_ORIGINS", default="*", cast=lambda v: [i.strip() for i in v.split(",")]
 )
 
 CACHES = {
