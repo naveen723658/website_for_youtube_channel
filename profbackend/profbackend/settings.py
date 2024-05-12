@@ -25,7 +25,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost','shriindrakshidhaam.com','127.0.0.1','34.171.85.54']
+ALLOWED_HOSTS = ['localhost','shriindrakshidhaam.com','127.0.0.1','34.68.68.105']
 # ALLOWED_HOSTS = config(
 #     "ALLOWED_HOSTS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 # )

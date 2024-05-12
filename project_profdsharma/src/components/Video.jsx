@@ -32,7 +32,7 @@ const Video = () => {
   const [videodetail, setvideodetail] = useState([]);
   const [commentdata, setcommentdata] = useState([]);
   const [webcommentdata, setwebcommentdata] = useState([]);
-
+  const api = import.meta.env.VITE_BACKEND_URL;
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -57,24 +57,24 @@ const Video = () => {
     try {
       // Videos Details
       const videodetails = await axios.get(
-        `http://127.0.0.1:8000/video_detail/${VIDEO_ID}`
+        `${api}/video_detail/${VIDEO_ID}`
       );
       setvideodetail(videodetails.data.items);
       // Playlist Items
       const playlistVideos = await axios.get(
-        `http://127.0.0.1:8000/playlistsitem/${VIDEO_ID}`
+        `${api}/playlistsitem/${VIDEO_ID}`
       );
       setPlaylistData(playlistVideos.data.items);
 
       // comments
       const comments = await axios.get(
-        `http://127.0.0.1:8000/comments/${VIDEO_ID}/`
+        `${api}/comments/${VIDEO_ID}/`
       );
       setcommentdata(comments.data);
 
       // web comments
       const webcomments = await axios.get(
-        `http://127.0.0.1:8000/home/comment/`
+        `${api}/home/comment/`
       );
       // console.log(webcomments.data.filter((item) => item.videoid === VIDEO_ID));
       setwebcommentdata(
@@ -82,7 +82,7 @@ const Video = () => {
       );
 
       // Playlist
-      const playlist = await axios.get(`http://127.0.0.1:8000/playlists/`);
+      const playlist = await axios.get(`${api}/playlists/`);
       setPlaylist(playlist.data);
     } catch (error) {
       console.log(error);

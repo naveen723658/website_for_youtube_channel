@@ -10,10 +10,11 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 const Latest = () => {
+  const api = import.meta.env.VITE_BACKEND_URL;
   const [youtubedata, setYoutubedata] = useState([]);
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/combine_data/")
+      .get(`${api}/combine_data/`)
       .then((res) => {
         // console.log(res.data)
         setYoutubedata(res.data);

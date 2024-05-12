@@ -10,10 +10,11 @@ import axios from "axios";
 import react, { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 const Recent = () => {
+    const api = import.meta.env.VITE_BACKEND_URL;
   const [videos, setVideos] = useState([]);
   const getChannelVideos = useCallback(async () => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/channel_videos/`);
+      const response = await axios.get(`${api}/channel_videos/`);
       //   console.log(response.data.items.slice(0, 4));
       setVideos(response.data.items.slice(1, 5));
     } catch (error) {

@@ -5,7 +5,7 @@ import axios from "axios";
 
 const Live = () => {
   const [show, setShow] = useState(true);
-
+  const api = import.meta.env.VITE_BACKEND_URL;
   const handleScroll = () => {
     if (window.pageYOffset > 400) {
       setShow(false);
@@ -15,14 +15,15 @@ const Live = () => {
   };
   const [livevideo, setLivevideo] = useState([]);
   useEffect(()=>{
-    axios.get('http://127.0.0.1:8000/live')
-    .then((res) =>{
-      // console.log(res.data);
-      setLivevideo(res.data);
-    })
-    .catch((error) =>{
-      console.log(error);
-    });
+    axios
+      .get(`${api}/live`)
+      .then((res) => {
+        // console.log(res.data);
+        setLivevideo(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     
   },[])
   useEffect(() =>{

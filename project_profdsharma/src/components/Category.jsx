@@ -2,36 +2,37 @@ import axios from "axios";
 import React, { useEffect, useState, useCallback } from "react";
 
 const Category = () => {
+  const api = import.meta.env.VITE_BACKEND_URL;
   const [youtubedata, setYoutubedata] = useState([]);
   const [playlist, setPlaylist] = useState(null);
   const [pageToken, setPageToken] = useState([]);
   const [Token, setToken] = useState("None");
   const PageToken = (mytoken) => {
     setPageToken(mytoken);
-    console.log(mytoken)
+    console.log(mytoken);
     // fetch()
   };
   const fetch = useCallback(async () => {
     try {
       const response = await axios.get(
-        `http://127.0.0.1:8000/playlists/${pageToken}`
+        `${api}/playlists/${pageToken}`
       );
       const { items, nextPageToken } = response.data;
       setPlaylist([...items]);
       setToken(nextPageToken);
-      console.log("token = ", nextPageToken)
+      console.log("token = ", nextPageToken);
       if (!nextPageToken) {
         setHasMore(false);
       }
     } catch (error) {
       console.log(error);
     }
-  },[pageToken]);
+  }, [pageToken]);
 
-// console.log('pagetoken = ', pageToken)
+  // console.log('pagetoken = ', pageToken)
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/combine_data/")
+      .get(`${api}/combine_data/`)
       .then((res) => {
         setYoutubedata(res.data);
       })

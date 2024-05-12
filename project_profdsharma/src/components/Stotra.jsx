@@ -7,10 +7,10 @@ const Stotra = () => {
   const [cetegory, setcetegory] = useState([]);
   const [cetegoryitem, setcetegoryitem] = useState([]);
   const [youtubedata, setYoutubedata] = useState([]);
-  //   const [itemcount, setitemcount] = useState([])
+  const api = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/home/StotraAndStutiCategory/")
+      .get(`${api}/home/StotraAndStutiCategory/`)
       .then((res) => {
         setcetegory(res.data);
       })
@@ -18,7 +18,7 @@ const Stotra = () => {
         console.log(error);
       });
     axios
-      .get("http://127.0.0.1:8000/home/StotraAndStuti/")
+      .get(`${api}/home/StotraAndStuti/`)
       .then((res) => {
         console.log(res.data);
         setcetegoryitem(res.data);
@@ -28,7 +28,7 @@ const Stotra = () => {
       });
 
     axios
-      .get("http://127.0.0.1:8000/combine_data/")
+      .get(`${api}/combine_data/`)
       .then((res) => {
         setYoutubedata(res.data);
       })

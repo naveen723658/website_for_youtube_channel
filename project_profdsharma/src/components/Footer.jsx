@@ -12,15 +12,14 @@ import {
 } from "react-icons/fa";
 import axios from "axios";
 
-
-
 const Footer = () => {
   const [contactData, setContactData] = useState([]);
   const [EmailData, setEmailData] = useState([]);
   const [tags, settags] = useState([]);
+  const api = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/home/ContactNumber/")
+      .get(`${api}/home/ContactNumber/`)
       .then((res) => {
         // console.log(res.data)
         setContactData(res.data);
@@ -29,34 +28,35 @@ const Footer = () => {
         console.log(error);
       });
     axios
-      .get("http://127.0.0.1:8000/home/EmailAddress/")
+      .get(`${api}/home/EmailAddress/`)
       .then((res) => {
         setEmailData(res.data);
       })
       .catch((error) => {
         console.log(error);
-      })
-      
+      });
+
     axios
-      .get("http://127.0.0.1:8000/statistic/")
+      .get(`${api}/statistic/`)
       .then((res) => {
         // console.log()
-        const keywordsString = res.data.items[0].brandingSettings.channel.keywords;
-        const keywordsList = keywordsString.split('\n');
+        const keywordsString =
+          res.data.items[0].brandingSettings.channel.keywords;
+        const keywordsList = keywordsString.split("\n");
         settags(keywordsList);
       })
       .catch((error) => {
         console.log(error);
       })
-      
-    // axios
-    //   .get(`https://www.googleapis.com/youtube/v3/channels`, {
-    //     params: {
-    //       part: "brandingSettings",
-    //       id: CHANNEL_ID,
-    //       key: API_KEY,
-    //     },
-    //   })
+
+      // axios
+      //   .get(`https://www.googleapis.com/youtube/v3/channels`, {
+      //     params: {
+      //       part: "brandingSettings",
+      //       id: CHANNEL_ID,
+      //       key: API_KEY,
+      //     },
+      //   })
       // .then((response) => {
       //   console.log(response.brandingSettings.channel.keywords);
       //   settags(response.data.items[0].snippet.tags)
@@ -68,7 +68,7 @@ const Footer = () => {
   return (
     <>
       {/* col btn btn-default */}
-      
+
       <div className="footer-ablove">
         <div className="container">
           <div className="d-block d-lg-flex justify-content-between align-item-center">
@@ -157,15 +157,14 @@ const Footer = () => {
                 <div className="kilimanjaro_part">
                   <h5>Tags Widget</h5>
                   <ul className=" kilimanjaro_widget">
-                { tags.map((item, index) =>(
-                   <li key={index}>
-                   <a href="#">{item}</a>
-                 </li>
-                )) }
-                </ul>
-                 
-                </div> 
-               
+                    {tags.map((item, index) => (
+                      <li key={index}>
+                        <a href="#">{item}</a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
                 <div className="kilimanjaro_part m-top-15">
                   <h5>Important Links</h5>
                   <ul className="kilimanjaro_links">
@@ -196,13 +195,13 @@ const Footer = () => {
                     <li>
                       <a href="#">
                         <i className="fa fa-angle-right" aria-hidden="true" />
-                       Public Opinion
+                        Public Opinion
                       </a>
                     </li>
                     <li>
                       <a href="#">
                         <i className="fa fa-angle-right" aria-hidden="true" />
-                         Contact US
+                        Contact US
                       </a>
                     </li>
                   </ul>

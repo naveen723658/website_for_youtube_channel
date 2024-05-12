@@ -3,6 +3,7 @@ import counterUp from "counterup2";
 import axios from "axios";
 const Stats = () => {
   const [stats, setstats] = useState([]);
+    const api = import.meta.env.VITE_BACKEND_URL;
   useEffect(() => {
     const countNumbers = document.querySelectorAll(".count-number");
     countNumbers.forEach((countNumber) => {
@@ -12,7 +13,7 @@ const Stats = () => {
       });
     });
     axios
-      .get("http://127.0.0.1:8000/statistic/")
+      .get(`${api}/statistic/`)
       .then((res) => {
         // console.log(res.data);
         setstats(res.data);
