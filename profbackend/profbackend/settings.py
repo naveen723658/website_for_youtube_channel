@@ -135,8 +135,9 @@ STATICFILES_DIRS = [
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = config(
-    "CORS_ALLOWED_ORIGINS", default="*", cast=lambda v: [i.strip() for i in v.split(",")]
+    "CORS_ALLOWED_ORIGINS", default="", cast=lambda v: [i.strip() for i in v.split(",")]
 )
+
 
 CACHES = {
     "default": {
