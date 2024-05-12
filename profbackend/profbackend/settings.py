@@ -137,13 +137,13 @@ AWS_S3_FILE_OVERWRITE = False
 # STATICFILES_STORAGE = 'storages.backends.s3boto3.S3StaticStorage'
 # DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 
-STATIC_URL = "/static/"
+STATIC_URL = "static/"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
-STATIC_ROOT = BASE_DIR / "static"
-# STATICFILES_DIRS = [
-#     BASE_DIR / "static",
-# ]
+STATIC_ROOT = BASE_DIR / "staticfiles_build"
+STATICFILES_DIRS = [
+    BASE_DIR / "static",
+]
 
 
 
