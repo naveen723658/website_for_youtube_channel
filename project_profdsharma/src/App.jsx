@@ -26,22 +26,6 @@ function App() {
   const [latestVideos, setLatestVideos] = useState([]);
   const [playlistsData, setPlaylistsData] = useState([]);
   const [Playlist, setPlaylist] = useState([]);
-  // const fetchData = async () => {
-  //   const latestUploads = await axios.get(
-  //     'http://127.0.0.1:8000/latest_videos/'
-  //   );
-  //   setLatestVideos(latestUploads.data);
-
-  //   const playlists = await axios.get(
-  //     'http://127.0.0.1:8000/playlists/'
-  //   );
-  //   setPlaylist(playlists.data.items);
-
-  // };
-  // useEffect(() => {
-  //   fetchData();
-  // }, [ ]);
-
   return (
     <>
       <BrowserRouter>

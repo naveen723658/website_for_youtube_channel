@@ -56,7 +56,7 @@ const Navbar = () => {
       pathName: "Contact US",
     },
   ];
-
+  const api = import.meta.env.VITE_BACKEND_URL;
   const [headerData, setHeaderData] = useState([]);
   const [contactData, setContactData] = useState([]);
   const [EmailData, setEmailData] = useState([]);
@@ -64,7 +64,7 @@ const Navbar = () => {
 
   useEffect(() => {
     axios
-      .get("http://127.0.0.1:8000/home/header/")
+      .get(`${api}/home/header/`)
       .then((res) => {
         setHeaderData(res.data);
       })
@@ -72,7 +72,7 @@ const Navbar = () => {
         console.log(error);
       });
     axios
-      .get("http://127.0.0.1:8000/home/ContactNumber/")
+      .get(`${api}/home/ContactNumber/`)
       .then((res) => {
         setContactData(res.data);
       })
@@ -80,7 +80,7 @@ const Navbar = () => {
         console.log(error);
       });
     axios
-      .get("http://127.0.0.1:8000/home/EmailAddress/")
+      .get(`${api}/home/EmailAddress/`)
       .then((res) => {
         setEmailData(res.data);
       })
@@ -108,7 +108,10 @@ const Navbar = () => {
                     <span className="ml-0 mr-2 icon">
                       <FaEnvelope />
                     </span>
-                    {EmailData && EmailData.map((value, _) => <React.Fragment key={_}>{value.email}</React.Fragment>)}
+                    {EmailData &&
+                      EmailData.map((value, _) => (
+                        <React.Fragment key={_}>{value.email}</React.Fragment>
+                      ))}
                     <span>|</span>
                   </li>
                   <li className="m-auto ml-md-0 " key={151}>
