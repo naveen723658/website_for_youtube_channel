@@ -5,7 +5,7 @@ const Hero = ({herodata}) => {
       <div className="banner-card container-fluid">
         <div className="container">
           <div className="row">
-            <div className="col-md-12 py-4 banner-slid">
+            <div className="col-md-12 py-0 py-md-4 banner-slid">
               <div
                 id="carouselExampleIndicators"
                 className="carousel slide"

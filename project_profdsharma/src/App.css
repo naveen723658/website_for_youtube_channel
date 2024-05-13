@@ -6,7 +6,6 @@
   font-family: "Roboto", sans-serif;
 }
 
-
 .logo img {
   margin: auto;
 }
@@ -14,7 +13,7 @@
 header .header-top {
   background-color: #cc1821;
 }
-.button{
+.button {
   background-color: #cc1821 !important;
   outline: none !important;
   color: #fff !important;
@@ -26,7 +25,6 @@ header .header-top .col-det .ulleft li {
 }
 header .header-top .col-det .ulleft li svg {
   fill: #ffff;
-
 }
 header .header-top .col-det .ulleft li span {
   margin-left: 15px;
@@ -97,7 +95,7 @@ header .header-top .col-det .ulright li {
 .m-scroll__title > div > p {
   font-weight: 600;
   padding: 2px 0;
-  font-family: 'Lato', sans-serif !important;
+  font-family: "Lato", sans-serif !important;
 }
 
 div:hover {
@@ -552,7 +550,7 @@ ol li {
   background-color: #555;
 }
 @media (max-width: 768px) {
-  .mycard{
+  .mycard {
     margin: 1rem 0;
   }
 }
@@ -1515,15 +1513,12 @@ ol li {
   transition: all 500ms cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.1s;
 }
 
-.opacity-5{
+.opacity-5 {
   opacity: 50%;
 }
-.opacity-5:hover{
+.opacity-5:hover {
   opacity: 100%;
 }
-
-
-
 
 .vjs-custom .vjs-big-play-button {
   width: 3rem !important;
